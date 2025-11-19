@@ -1,46 +1,31 @@
-name: Dependency Submission
+name: "Submit npm Dependency Snapshot"
+
 on:
-  # Trigger on push to the main branch
   push:
-    branches:
-      - main
-  # Allow manual trigger for testing
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
   workflow_dispatch:
 
-permissions:
-  contents: write # Required for submitting the snapshot to GitHub
-
 jobs:
-  submit-dependencies:
+  dependency-submission:
     runs-on: ubuntu-latest
-
-    env:
-      SNAPSHOT_FILE_PATH: 'output.json'
-    
+    permissions:
+      contents: write        # required to upload dependency snapshot
     steps:
-      - name: ⬇️ Checkout Repository
+      - name: Checkout repository
         uses: actions/checkout@v4
-        
-      - name: 🛠️ Set up Node.js
+
+      - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          # Use an actively supported LTS version for better compatibility
-          node-version: '20' 
-          
-      - name: 📦 Install Dependencies & Update Lock File (Secure)
-        # Guarantees package-lock.json is up-to-date. --ignore-scripts maintains security.
-        run: npm install --ignore-scripts --force-lock
+          node-version: 20
+          cache: npm
 
-      - name: ⚙️ Generate and Submit Dependency Snapshot
-        # 🔑 CORRECTED ACTION PATH IS HERE 🔑
+      - name: Install dependencies (without script execution)
+        run: npm ci --ignore-scripts
+
+      - name: Detect and submit dependencies to GitHub
         uses: advanced-security/component-detection-dependency-submission-action@v0.1.0
         with:
-          # Writes the snapshot to the path defined in the env block
-          output-json-file: ${{ env.SNAPSHOT_FILE_PATH }}
-
-      - name: ⬆️ Upload Dependency Snapshot Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: dependency-snapshot
-          path: ${{ env.SNAPSHOT_FILE_PATH }}
-          retention-days: 5
+          token: ${{ secrets.GITHUB_TOKEN }}
