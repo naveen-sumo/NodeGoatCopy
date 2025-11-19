@@ -24,7 +24,7 @@ jobs:
       - name: 🛠️ Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20' # Use your project's required Node version
+          node-version: '12' # Use your project's required Node version
           
       - name: 📦 Install Dependencies (Skip Install Scripts)
         # This command is critical as it resolves all dependencies, 
@@ -41,7 +41,7 @@ jobs:
         with:
           # The token needs 'write' access to the repository's 'contents' scope
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          
+
           directoryExclusionList: "node_modules,dist,.next"
           # Optional: Specify the package manager if the action needs it.
           # package-manager: 'npm'
