@@ -8,23 +8,39 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: write # Required for submitting the snapshot to GitHub
 
 jobs:
-  minimal-dependency-check:
+  submit-dependencies:
     runs-on: ubuntu-latest
+
+    env:
+      SNAPSHOT_FILE_PATH: 'output.json'
     
     steps:
-      - uses: actions/checkout@v4
-      
-      - uses: actions/setup-node@v4
+      - name: ⬇️ Checkout Repository
+        uses: actions/checkout@v4
+        
+      - name: 🛠️ Set up Node.js
+        uses: actions/setup-node@v4
         with:
-          node-version: '20' # Use modern Node version
+          # Use an actively supported LTS version for better compatibility
+          node-version: '20' 
+          
+      - name: 📦 Install Dependencies & Update Lock File (Secure)
+        # Guarantees package-lock.json is up-to-date. --ignore-scripts maintains security.
+        run: npm install --ignore-scripts --force-lock
 
-      - name: Install and update lock file
-        # Use simple npm install to ensure compatibility with the action
-        run: npm install
+      - name: ⚙️ Generate and Submit Dependency Snapshot
+        # 🔑 CORRECTED ACTION PATH IS HERE 🔑
+        uses: github/dependency-submission-action@v3
+        with:
+          # Writes the snapshot to the path defined in the env block
+          output-json-file: ${{ env.SNAPSHOT_FILE_PATH }}
 
-      - name: Generate and Submit Dependency Snapshot
-        # This is the action you are having trouble with.
-        uses: actions/dependency-submission-action@v3
+      - name: ⬆️ Upload Dependency Snapshot Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: dependency-snapshot
+          path: ${{ env.SNAPSHOT_FILE_PATH }}
+          retention-days: 5
