@@ -29,7 +29,10 @@ jobs:
           
       - name: 📦 Install Dependencies & Update Lock File (Secure)
         # Guarantees package-lock.json is up-to-date. --ignore-scripts maintains security.
-        run: npm install --ignore-scripts --force-lock
+        run: |
+          rm -rf node_modules
+          rm -f package-lock.json
+          npm install --ignore-scripts --force-lock
 
       - name: ⚙️ Generate and Submit Dependency Snapshot
         # 🔑 CORRECTED ACTION PATH IS HEREE 🔑
