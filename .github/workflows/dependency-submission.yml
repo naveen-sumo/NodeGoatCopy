@@ -1,14 +1,12 @@
 name: Dependency Submission
 
 on:
-  # Trigger on pushes to main branch (you can customize)
   push:
     branches: ["main"]
 
 permissions:
   contents: read
-  # To submit dependency graph
-  dependencies: write
+  security-events: write  # Required by dependency-submission-action
 
 jobs:
   submit-dependencies:
@@ -24,16 +22,14 @@ jobs:
           node-version: "20"
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
-      - name: Build dependency graph using npm
-        run: |
-          # Generate a dependency tree in JSON format
-          npm ls --all --json > npm-dependencies.json
+      - name: Generate dependency snapshot
+        id: snapshot
+        run: npm ls --all --json > npm-dependencies.json
 
-      - name: Submit dependencies to GitHub
+      - name: Submit dependency snapshot to GitHub
         uses: github/dependency-submission-action@v4
         with:
-          # Path to the dependency manifest file
-          # (This is the file generated above)
+          token: ${{ secrets.GITHUB_TOKEN }}
           snapshot: npm-dependencies.json
