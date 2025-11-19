@@ -30,7 +30,7 @@ jobs:
         run: npm i --ignore-scripts
 
       - name: Detect and submit dependencies to GitHub
-        uses: advanced-security/component-detection-dependency-submission-action@v0.1.0
+        uses: advanced-security/component-detection-dependency-submission-action@v0.1.1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           directory: ./                # ensure it’s the directory with package-lock.json
