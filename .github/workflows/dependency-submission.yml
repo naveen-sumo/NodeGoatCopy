@@ -13,6 +13,9 @@ permissions:
 jobs:
   submit-dependencies:
     runs-on: ubuntu-latest
+
+    env:
+      SNAPSHOT_FILE_PATH: 'dependency-snapshot.json'
     
     # Optional: Use a matrix if you have a huge number of subdirectories
     # and want to parallelize the scan, but usually not needed for NPM.
@@ -39,9 +42,15 @@ jobs:
         # or a generic NPM snapshot tool.
         uses: advanced-security/component-detection-dependency-submission-action@v0.0.2
         with:
-          # The token needs 'write' access to the repository's 'contents' scope
-          github-token: ${{ secrets.GITHUB_TOKEN }}
 
           directoryExclusionList: "node_modules,dist,.next"
+          output-json-file: ${{ env.SNAPSHOT_FILE_PATH }}
           # Optional: Specify the package manager if the action needs it.
           # package-manager: 'npm'
+      - name: ⬆️ Upload Dependency Snapshot Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: dependency-snapshot
+          path: ${{ env.SNAPSHOT_FILE_PATH }}
+          # Optional: Only keep the artifact for 5 days
+          retention-days: 5
