@@ -32,7 +32,7 @@ jobs:
         run: npm install --ignore-scripts --force-lock
 
       - name: ⚙️ Generate and Submit Dependency Snapshot
-        # 🔑 CORRECTED ACTION PATH IS HERE 🔑
+        # 🔑 CORRECTED ACTION PATH IS HEREE 🔑
         uses: advanced-security/component-detection-dependency-submission-action@v0.1.0
         with:
           # Writes the snapshot to the path defined in the env block
