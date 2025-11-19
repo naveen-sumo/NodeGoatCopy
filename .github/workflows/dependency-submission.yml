@@ -10,6 +10,10 @@ on:
 jobs:
   dependency-submission:
     runs-on: ubuntu-latest
+
+    env:
+      SNAPSHOT_FILE_PATH: 'output.json'
+
     permissions:
       contents: write        # required to upload dependency snapshot
     steps:
@@ -31,3 +35,11 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           directory: ./                # ensure it’s the directory with package-lock.json
           fail-on-error: false         # prevents hard failure if another ecosystem misbehaves
+          output-json-file: ${{ env.SNAPSHOT_FILE_PATH }}
+
+      - name: ⬆️ Upload Dependency Snapshot Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: dependency-snapshot
+          path: ${{ env.SNAPSHOT_FILE_PATH }}
+          retention-days: 5
