@@ -26,7 +26,7 @@ jobs:
         with:
           node-version: '20' # Use your project's required Node version
           
-      - name: 📦 Install Dependencies (Root and Workspaces)
+      - name: 📦 Install Dependencies (Skip Install Scripts)
         # This command is critical as it resolves all dependencies, 
         # including those in sub-directories/workspaces, and updates lock files.
         run: npm install --ignore-scripts 
