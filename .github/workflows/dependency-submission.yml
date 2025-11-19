@@ -33,19 +33,7 @@ jobs:
         # This command is critical as it resolves all dependencies, 
         # including those in sub-directories/workspaces, and updates lock files.
         run: npm install --production --no-cache
-        
-      - name: ⚙️ Generate and Submit Dependency Snapshot
-        # This step uses a third-party action to read the lock files, 
-        # map the dependencies, and submit them to the GitHub Dependency Graph.
-        # NOTE: You may need to replace this with a specific action like 
-        # one that supports your monorepo tool (e.g., Lerna, Nx, etc.) 
-        # or a generic NPM snapshot tool.
-        uses: advanced-security/dependency-submission-action@v4
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          output-json-file: ${{ env.SNAPSHOT_FILE_PATH }}
-          # Optional: Specify the package manager if the action needs it.
-          # package-manager: 'npm'
+
       - name: ⬆️ Upload Dependency Snapshot Artifact
         uses: actions/upload-artifact@v4
         with:
