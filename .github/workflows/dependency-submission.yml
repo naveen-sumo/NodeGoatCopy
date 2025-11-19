@@ -23,7 +23,7 @@ jobs:
           cache: npm
 
       - name: Install dependencies (without script execution)
-        run: npm ci --ignore-scripts
+        run: npm i --ignore-scripts
 
       - name: Detect and submit dependencies to GitHub
         uses: advanced-security/component-detection-dependency-submission-action@v0.1.0
