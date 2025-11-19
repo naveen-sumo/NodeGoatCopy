@@ -37,7 +37,7 @@ jobs:
         # NOTE: You may need to replace this with a specific action like 
         # one that supports your monorepo tool (e.g., Lerna, Nx, etc.) 
         # or a generic NPM snapshot tool.
-        uses: actions/dependency-submission-action@v3
+        uses: advanced-security/component-detection-dependency-submission-action@v0.0.2
         with:
           # The token needs 'write' access to the repository's 'contents' scope
           github-token: ${{ secrets.GITHUB_TOKEN }}
