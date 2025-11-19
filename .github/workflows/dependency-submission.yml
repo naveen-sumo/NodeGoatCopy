@@ -31,16 +31,16 @@ jobs:
         # Guarantees package-lock.json is up-to-date. --ignore-scripts maintains security.
         run: npm install --ignore-scripts --force-lock
 
-      - name: ⚙️ Generate and Submit Dependency Snapshot
-        # 🔑 CORRECTED ACTION PATH IS HEREE 🔑
-        uses: advanced-security/component-detection-dependency-submission-action@v0.1.0
-        with:
-          # Writes the snapshot to the path defined in the env block
-          output-json-file: ${{ env.SNAPSHOT_FILE_PATH }}
+      - name: ⚙️ Generate Snapshot JSON
+        run: |
+          npm install --global @github/dependency-submission-cli
+          gh dependency-submission generate --allow-any-sha \
+             --package-manager npm \
+             --lock-file ./package-lock.json \
+             --output-file ${{ env.SNAPSHOT_FILE_PATH }}
 
-      - name: ⬆️ Upload Dependency Snapshot Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: dependency-snapshot
-          path: ${{ env.SNAPSHOT_FILE_PATH }}
-          retention-days: 5
+      - name: ⏫ Submit Dependency Snapshot
+        run: gh dependency-submission create ${{ env.SNAPSHOT_FILE_PATH }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
