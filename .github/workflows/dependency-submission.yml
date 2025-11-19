@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      SNAPSHOT_FILE_PATH: 'dependency-snapshot.json'
+      SNAPSHOT_FILE_PATH: 'output.json'
     
     # Optional: Use a matrix if you have a huge number of subdirectories
     # and want to parallelize the scan, but usually not needed for NPM.
@@ -37,7 +37,7 @@ jobs:
       - name: ⬆️ Upload Dependency Snapshot Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: output
+          name: dependency-snapshot
           path: ${{ env.SNAPSHOT_FILE_PATH }}
           # Optional: Only keep the artifact for 5 days
           retention-days: 5
