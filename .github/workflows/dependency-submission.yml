@@ -33,7 +33,7 @@ jobs:
 
       - name: ⚙️ Generate and Submit Dependency Snapshot
         # 🔑 CORRECTED ACTION PATH IS HERE 🔑
-        uses: github/dependency-submission-action@v3
+        uses: github/dependency-submission-action@06ad90ff0e713600ab81e59273c5b525d808d249
         with:
           # Writes the snapshot to the path defined in the env block
           output-json-file: ${{ env.SNAPSHOT_FILE_PATH }}
