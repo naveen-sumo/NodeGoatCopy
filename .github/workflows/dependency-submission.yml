@@ -37,7 +37,7 @@ jobs:
       - name: ⬆️ Upload Dependency Snapshot Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: dependency-snapshot
+          name: output
           path: ${{ env.SNAPSHOT_FILE_PATH }}
           # Optional: Only keep the artifact for 5 days
           retention-days: 5
